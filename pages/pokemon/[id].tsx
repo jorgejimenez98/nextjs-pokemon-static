@@ -2,11 +2,14 @@ import React from 'react'
 import { NextPage } from 'next'
 import { PokeAPI } from '../../api'
 import { Pokemon } from '../../interfaces'
+import { toogleFavorite } from '../../utils'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { Button, Card, Grid, Text, Image, Container } from '@nextui-org/react'
 
 interface PokemonDetailsProps { pokemon: Pokemon }
 const PokemonDetailsPage: NextPage<PokemonDetailsProps> = ({ pokemon }) => {
+
+  const onToglleFavorite = () => { toogleFavorite(pokemon.id) }
 
   return <Grid.Container css={{ marginTop: '5px'}} gap={2}>
     <Grid xs={12} sm={4}>
@@ -29,6 +32,7 @@ const PokemonDetailsPage: NextPage<PokemonDetailsProps> = ({ pokemon }) => {
           <Button
             color={'gradient'}
             ghost
+            onClick={onToglleFavorite}
           >
             Guardar en Favoritos
           </Button>
@@ -68,7 +72,7 @@ const PokemonDetailsPage: NextPage<PokemonDetailsProps> = ({ pokemon }) => {
   </Grid.Container>
 }
 
-// Static Side 
+// Static Side Generating SSG
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
   const pokemonIds = Array.from({ length: 151 }, (_, idx) => `${idx + 1}`)
 

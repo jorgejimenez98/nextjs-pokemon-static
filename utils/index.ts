@@ -1,0 +1,1 @@
+export { toogleFavorite } from "./localFavorites";
