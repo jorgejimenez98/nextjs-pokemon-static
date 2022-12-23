@@ -96,7 +96,8 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
     paths: pokemonIds.map(id => ({
       params: { id }
     })),
-    fallback: false
+    fallback: 'blocking'
+    // fallback: false
     // "blocking" Permite todas las pages y manda la prop como null
   }
 }
@@ -104,8 +105,30 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { id } = params as { id: string }
 
-  const { data: pokemon } = await PokeAPI.get<Pokemon>(`/pokemon/${id}`)
-  return { props: { pokemon } }
+  // Incremental Static Generation
+  let pokemonAux = null
+  try { // Si existe el ID lo muestra
+    let { data: pokemon } = await PokeAPI.get<Pokemon>(`/pokemon/${id}`)
+    pokemonAux = pokemon
+  } catch (error) {
+    pokemonAux = null
+  }
+
+  // Si no existe lo manda a la url /
+  if (!pokemonAux) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false
+      }
+    }
+  }
+
+  return { 
+    props: { pokemon: pokemonAux },
+    // Incremental Static regeneration
+    revalidate: 86400 // Se regenera la pagina cada 24 horas, son segundos
+  }
 }
 
 export default PokemonDetailsPage
