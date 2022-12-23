@@ -1,1 +1,1 @@
-export { toogleFavorite } from "./localFavorites";
+export { default as localFavorites } from "./localFavorites";
