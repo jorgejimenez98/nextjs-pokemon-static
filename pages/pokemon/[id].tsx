@@ -5,6 +5,7 @@ import { Pokemon } from '../../interfaces'
 import { localFavorites } from '../../utils'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { Button, Card, Grid, Text, Image, Container } from '@nextui-org/react'
+import confetti from 'canvas-confetti'
 
 interface PokemonDetailsProps { pokemon: Pokemon }
 const PokemonDetailsPage: NextPage<PokemonDetailsProps> = ({ pokemon }) => {
@@ -13,6 +14,17 @@ const PokemonDetailsPage: NextPage<PokemonDetailsProps> = ({ pokemon }) => {
   const onToglleFavorite = () => { 
     localFavorites.toogleFavorite(pokemon.id)
     setIsInFavorites(!isInFavorites)
+    if (isInFavorites) return
+    confetti({
+      zIndex: 999,
+      particleCount: 100,
+      spread: 160,
+      angle: -100,
+      origin: {
+        x: 1,
+        y: 0
+      }
+    })
   }
 
   return <Grid.Container css={{ marginTop: '5px'}} gap={2}>
